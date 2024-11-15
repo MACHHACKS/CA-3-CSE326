@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechSphere - Tech Reviews and News</title>
+    <style>
+        /* Your existing styles */
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #1a1a1a;
+            color: #ffffff;
+        }
+
+        .navbar {
+            background: rgba(34, 34, 36, 0.95);
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            padding: 0.75rem 1rem;
+            margin-right: 1rem;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .navbar a:hover {
+            background: rgba(127, 7, 233, 0.2);
+            color: #07bd47;
+            transform: translateY(-2px);
+        }
+
+        .header {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                        url('/api/placeholder/1920/400');
+            background-size: cover;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin: 0;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .section {
+            margin: 2rem 0;
+            padding: 2rem;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .video-container {
+            aspect-ratio: 16/9;
+            width: 100%;
+        }
+
+        .video-container iframe {
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
+            border: none;
+        }
+
+        /* New styles for news section */
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .news-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .news-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .news-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .news-content {
+            padding: 1.5rem;
+        }
+
+        .news-date {
+            color: #0aa4f7;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .news-title {
+            color: #ffffff;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .news-excerpt {
+            color: #cccccc;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .news-tag {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            background: rgba(10, 164, 247, 0.2);
+            color: #0aa4f7;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        /* Your existing styles continue... */
+        .community-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .community-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .community-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .community-card h3 {
+            color: #ed4609;
+            margin-bottom: 1rem;
+        }
+
+        .community-button {
+            display: inline-block;
+            background: #4402dd;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .community-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(3, 14, 223, 0.4);
+        }
+
+        .rules-list {
+            background: rgba(4, 226, 130, 0.05);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .rules-list li {
+            margin: 1rem 0;
+            padding-left: 1rem;
+            border-left: 3px solid #1aea0b;
+        }
+        .timeline {
+            position: relative;
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 20px;
+        }
+        
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 2px;
+            background: #5865f2;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -1px;
+        }
+        
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: calc(50% - 40px);
+            margin: 2rem 0;
+        }
+        
+        .timeline-item:nth-child(odd) {
+            left: 0;
+        }
+        
+        .timeline-item:nth-child(even) {
+            left: 50%;
+        }
+        
+        .timeline-content {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .timeline-content:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .timeline-year {
+            color: #f25858;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .timeline::after {
+                left: 31px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            
+            .timeline-item:nth-child(even) {
+                left: 0;
+            }
+        }   
+
+        .footer {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(34, 34, 36, 0.95);
+            margin-top: 2rem;
+        }
+
+        .footer p {
+            margin: 0;
+        }
+
+ 
+    </style>
+</head>
+<body>
+    <!-- Your existing navbar -->
+    <nav class="navbar">
+        <a href="#reviews">Reviews</a>
+        <a href="#news">News</a>
+        <a href="#community">Community</a>
+        <a href="#about">History</a>
+    </nav>
+
+    <!-- Your existing header -->
+    <header class="header">
+        <h1>Welcome to TechSphere</h1>
+        <p>Your one-stop destination for tech reviews and news</p>
+    </header>
+
+    <div class="container">
+        <!-- Your existing reviews section -->
+        <section id="reviews" class="section">
+            <h2>Tech Reviews</h2>
+            <div class="video-grid" id="video-grid"></div>
+        </section>
+
+        <section id="news" class="section">
+            <h2>Tech News</h2>
+            <div class="news-grid">
+                <div class="news-card">
+                    <img src="https://media.wired.com/photos/5e333e15be05400008f39506/master/pass/Business-QuantumComputing-Google-L1001386.jpg" alt="AI News" class="news-image">
+                    <div class="news-content">
+                        <div class="news-date">November 16, 2024</div>
+                        <h3 class="news-title">Breakthrough in Quantum Computing Achieves New Milestone</h3>
+                        <p class="news-excerpt">Scientists have achieved a major breakthrough in quantum computing, demonstrating sustained quantum coherence for over 10 minutes at room temperature.</p>
+                        <span class="news-tag">Quantum Computing</span>
+                    </div>
+                </div>
+        
+                <div class="news-card">
+                    <img src="https://viso.ai/wp-content/smush-webp/2024/01/Virtual-Reality-Headset-768x432.png.webp" alt="VR News" class="news-image">
+                    <div class="news-content">
+                        <div class="news-date">November 15, 2024</div>
+                        <h3 class="news-title">Next-Gen VR Headsets Promise Revolutionary Gaming Experience</h3>
+                        <p class="news-excerpt">Leading tech companies unveil new VR headsets with enhanced haptic feedback and ultra-high resolution displays.</p>
+                        <span class="news-tag">Virtual Reality</span>
+                    </div>
+                </div>
+        
+                <div class="news-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHDal5kTjnExHzNnkZRDaM9Ckq62r6cMSM4w&s" alt="Green Tech News" class="news-image">
+                    <div class="news-content">
+                        <div class="news-date">November 14, 2024</div>
+                        <h3 class="news-title">Solar Panel Efficiency Breaks New Record</h3>
+                        <p class="news-excerpt">Researchers develop new solar cell technology achieving 39% efficiency in laboratory conditions, promising cheaper renewable energy.</p>
+                        <span class="news-tag">Green Tech</span>
+                    </div>
+                </div>
+        
+                <div class="news-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUiznqV9Kq7wyN0BRAR2QJ4IbQsI0giYn8uA&s" alt="AI News" class="news-image">
+                    <div class="news-content">
+                        <div class="news-date">November 13, 2024</div>
+                        <h3 class="news-title">AI Model Achieves Human-Level Performance in Medical Diagnosis</h3>
+                        <p class="news-excerpt">New AI system demonstrates unprecedented accuracy in diagnosing complex medical conditions across multiple specialties.</p>
+                        <span class="news-tag">Artificial Intelligence</span>
+                    </div>
+                </div>
+        
+                <!-- First New Card -->
+                <div class="news-card">
+                    <img src="https://www.theforage.com/blog/wp-content/uploads/2022/12/what-is-cybersecurity-1024x631.jpg" alt="Cybersecurity News" class="news-image">
+                    <div class="news-content">
+                        <div class="news-date">November 12, 2024</div>
+                        <h3 class="news-title">Revolutionary Quantum Encryption Protocol Unveiled</h3>
+                        <p class="news-excerpt">Security researchers announce breakthrough in quantum-resistant encryption, promising unbreakable security for the quantum computing era.</p>
+                        <span class="news-tag">Cybersecurity</span>
+                    </div>
+                </div>
+        
+                <!-- Second New Card -->
+                <div class="news-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTN-O-VySZdRpMvl0W1EppgYttIi8lR3E430g&s" alt="Robotics News" class="news-image">
+                    <div class="news-content">
+                        <div class="news-date">November 11, 2024</div>
+                        <h3 class="news-title">Humanoid Robots Master Complex Manufacturing Tasks</h3>
+                        <p class="news-excerpt">New generation of industrial robots demonstrates unprecedented dexterity and learning capabilities in complex assembly operations.</p>
+                        <span class="news-tag">Robotics</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Your existing community section -->
+        <section id="community" class="section">
+            <h2>Join Our Community</h2>
+            
+            <div class="community-grid">
+                <div class="community-card">
+                    <h3>Tech Support</h3>
+                    <p>Get help with your tech problems from our experienced community members</p>
+                </div>
+                <div class="community-card">
+                    <h3>Study Groups</h3>
+                    <p>Join like-minded individuals in learning new technologies</p>
+                </div>
+                <div class="community-card">
+                    <h3>Project Collaboration</h3>
+                    <p>Find partners for your next tech project</p>
+                </div>
+                <div class="community-card">
+                    <h3>Career Guidance</h3>
+                    <p>Get advice from industry professionals</p>
+                </div>
+            </div>
+
+            <div class="rules-list">
+                <h3>Community Guidelines</h3>
+                <ul>
+                    <li>Be respectful and helpful to all members</li>
+                    <li>No spam or self-promotion without permission</li>
+                    <li>Keep discussions relevant to technology</li>
+                    <li>Share knowledge and help others learn</li>
+                </ul>
+            </div>
+
+            <div style="text-align: center;">
+                <p>Ready to join our growing community?</p>
+                <a href="https://discord.gg/7PPCrMzxea" class="community-button" target="_blank" rel="noopener noreferrer">
+                    Join our Discord
+                </a>
+            </div>
+        </section>
+
+        <section id="about" class="section">
+            <h2>Tech Innovations Timeline</h2>
+            <div class="timeline">
+                <!-- Previous timeline items remain the same -->
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-year">1969</div>
+                        <h3>Birth of the Internet</h3>
+                        <p>ARPANET, the precursor to the modern internet, is created by the US Department of Defense.</p>
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/b/bf/Arpanet_logical_map%2C_march_1977.png" alt="ARPANET" class="timeline-image">
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-year">1981</div>
+                        <h3>Personal Computing Era</h3>
+                        <p>IBM introduces its first personal computer, revolutionizing home computing.</p>
+                        <img src="https://www.ibm.com/content/dam/connectedassets-adobe-cms/worldwide-content/arc/cf/ul/g/c9/92/1981_IBMPC_5150.jpg/_jcr_content/renditions/cq5dam.web.3840.3840.jpeg" alt="IBM PC" class="timeline-image">
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-year">1991</div>
+                        <h3>World Wide Web</h3>
+                        <p>Tim Berners-Lee introduces the World Wide Web, transforming how we share information.</p>
+                        <img src="https://www.webdevelopersnotes.com/wp-content/uploads/world-wide-web-globe-and-logo.png" alt="World Wide Web" class="timeline-image">
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-year">2007</div>
+                        <h3>Smartphone Revolution</h3>
+                        <p>Apple launches the iPhone, changing mobile technology forever.</p>
+                        <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*AFhpHYmY06RRmvc3Kouu4Q.jpeg" alt="First iPhone" class="timeline-image">
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-year">2016</div>
+                        <h3>AI Breakthrough</h3>
+                        <p>AlphaGo defeats world champion Lee Sedol, marking a milestone in artificial intelligence.</p>
+                        <img src="https://www.denverpost.com/wp-content/uploads/2016/04/20160415__DP_NGPS_Export20160417_Z00_OP17P_SINGERp1.jpg?w=1024" alt="AlphaGo" class="timeline-image">
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-year">2023</div>
+                        <h3>AI Revolution</h3>
+                        <p>Generative AI transforms industries with breakthrough capabilities in text, image, and code generation.</p>
+                        <img src="https://s3.amazonaws.com/cms.ipressroom.com/219/files/202104/6074736bed6ae559485763d0_b3cfff26-6195-4f21-a7cc-55f7f16af7a/b3cfff26-6195-4f21-a7cc-55f7f16af7a_cc632c98-a01c-4a8f-867a-1ccf16244f47-prv.jpg" alt="AI Generation" class="timeline-image">
+                    </div>
+                </div>
+        
+                <!-- New timeline item -->
+                <div class="timeline-item">
+                    <div class="timeline-content" style="background: rgba(7, 189, 71, 0.1); border: 2px solid rgba(7, 189, 71, 0.3);">
+                        <div class="timeline-year" style="color: #07bd47;">The Future</div>
+                        <h3>Your Innovation Awaits</h3>
+                        <p>The next breakthrough could be yours! Join our community of innovators and shape the future of technology. Whether it's AI, quantum computing, or something entirely new, your ideas could be the next milestone in this timeline.</p>
+                        <img src="https://st.depositphotos.com/1479444/53710/v/600/depositphotos_537108812-stock-video-pixel-art-happiness-emotion-icon.jpg" alt="Future Innovation" class="timeline-image">
+                        <div style="text-align: center; margin-top: 1rem;">
+                            <a href="#community" class="community-button" style="background: #07bd47;">Start Your Journey</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer" style="display: flex; align-items: center; justify-content: space-between; padding: 1rem 2rem; background: rgba(34, 34, 36, 0.95);">
+            <p>TechSphere. CA3-CSE326 BY SREEVYAS CS</p>
+            <img src="https://gallerypng.com/wp-content/uploads/2024/08/lpu-logo-png-image.png" 
+                 alt="LPU Logo" 
+                 style="height: 50px; width: auto; margin-left: 1rem;">
+        </footer>
+
+    <!-- Your existing script -->
+    <script>
+        const apiKey = 'AIzaSyBtCcY_6npl9dOZU8L2Oo2l4xaVUnXI3Tw';
+        const query = 'tech reviews';
+        const videoGrid = document.getElementById('video-grid');
+
+        function fetchVideos() {
+            const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${query}&type=video&maxResults=6&key=${apiKey}`;
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const videos = data.items;
+                    videoGrid.innerHTML = '';
+                    
+                    videos.forEach(video => {
+                        const videoId = video.id.videoId;
+                        const videoContainer = document.createElement('div');
+                        videoContainer.className = 'video-container';
+                        
+                        const iframe = document.createElement('iframe');
+                        iframe.src = `https://www.youtube.com/embed/${videoId}`;
+                        iframe.allow = "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture";
+                        iframe.allowFullscreen = true;
+                        
+                        videoContainer.appendChild(iframe);
+                        videoGrid.appendChild(videoContainer);
+                    });
+                })
+                .catch(error => console.error('Error fetching YouTube videos:', error));
+        }
+
+        window.onload = fetchVideos;
+    </script>
+</body>
+</html>
